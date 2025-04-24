@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { getUsers } = require('../controller/controller');
+const { getTrainers } = require('../../controller/trainers/controller');
 
 
 /**
  * @swagger
- * /users:
+ * /trainers:
  *   get:
- *     summary: Obtener todos los usuarios
+ *     summary: Obtener todos los entrenadores
  *     responses:
  *       200:
- *         description: Lista de usuarios
+ *         description: Lista de entrenadores
  *         content:
  *           application/json:
  *             schema:
@@ -23,9 +23,9 @@ const { getUsers } = require('../controller/controller');
  *                     example: 1
  *                   name:
  *                     type: string
- *                     example: Guido
+ *                     example: Guidito
  */
 
-router.get('/', getUsers);
+router.get('/', getTrainers);
 
 module.exports = router;
