@@ -4,7 +4,7 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Mi API con Express',
+      title: 'EntrenApp',
       version: '1.0.0',
       description: 'Documentación de la API para el TP',
     },
@@ -14,7 +14,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/routes/**/*.js'], // Archivos donde Swagger buscará comentarios
+  apis: ['./src/routes/**/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
