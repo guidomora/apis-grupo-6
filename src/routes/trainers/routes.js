@@ -240,7 +240,7 @@ router.get("/service/:id/statistics", getTrainers);
 
 /**
  * @swagger
- * /search/{category}/{zone}/{price}/{mode}:
+ * /search/{category}/{zone}/{price}/{mode}/{calificacion}/{duracion}:
  *   get:
  *     summary: Busqueda de entrenadores
  *     parameters:
@@ -261,6 +261,16 @@ router.get("/service/:id/statistics", getTrainers);
  *           type: integer
  *       - in: path
  *         name: mode
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: calificacion
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: duracion
  *         required: false
  *         schema:
  *           type: string
@@ -302,6 +312,6 @@ router.get("/service/:id/statistics", getTrainers);
  *                   example: Error al obtener servicios
  */
 
-router.get("/search/:category/:zone/:price/:mode", getTrainers);
+router.get("/search/:category/:zone/:price/:mode/:calificacion/:duracion", getTrainers);
 
 module.exports = router;
