@@ -369,4 +369,6 @@ router.post("/comentar-puntuar/:id", getUsers);
 router.get('/entrenadores/:id/documents', getUsers);
 
 
+
+
 module.exports = router;

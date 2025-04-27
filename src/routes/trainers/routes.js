@@ -20,10 +20,8 @@ const { getTrainers } = require('../../controller/trainers/controller');
  *                 properties:
  *                   id:
  *                     type: integer
- *                     example: 1
  *                   name:
  *                     type: string
- *                     example: Guidito
  */
 
 router.get('/', getTrainers);
@@ -216,7 +214,7 @@ router.get("/service/:id/statistics", getTrainers);
  *                     example: Pepe
  *                   estado:
  *                     type: string
- *                     example: aceptado
+ *                     example: pendiente
  *                   fecha:
  *                     type: string
  *                     format: date
@@ -236,7 +234,43 @@ router.get("/service/:id/statistics", getTrainers);
  *                   example: Error al obtener servicios
  */
 
-router.get("/service/:id/statistics", getTrainers);
+router.get("/services", getTrainers);
+
+/**
+ * @swagger
+ * /services/{id}:
+ *   put:
+ *     summary: Aceptar o rechazar un servicio
+ *     responses:
+ *       201:
+ *         description: Aceptar o rechazar un servicio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     format: uuid
+ *                     example: 550e8400-e29b-41d4-a716-446655440000
+ *                   estado:
+ *                     type: string
+ *                     example: aceptado
+ *       400:
+ *         description: Error al obtener aceptar o rechazar un servicio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener aceptar o rechazar un servicio
+ */
+
+router.get("/services/:id", getTrainers);
 
 /**
  * @swagger
