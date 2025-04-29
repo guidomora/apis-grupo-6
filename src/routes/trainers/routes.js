@@ -28,6 +28,54 @@ router.get('/', getTrainers);
 
 /**
  * @swagger
+ * /trainers/{id}:
+ *   get:
+ *     summary: Obtener info de un entrenador
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID del usuario
+ *     responses:
+ *       201:
+ *         description: Servicio creado existosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  id:
+ *                    type: string
+ *                    format: uuid
+ *                    example: uuid
+ *                  trainerName:
+ *                    type: string
+ *                    example: agustin
+ *                  price:
+ *                    type: number
+ *                    example: 15.000
+ *                  comments:
+ *                    type: array
+ *                    example: ['El mejor de todos', 'Excelente servicio']
+ *       400:
+ *         description: Error al obtener entrenador
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener estadisticas
+ */
+
+router.get("/trainers/:id", getTrainers);
+
+/**
+ * @swagger
  * /service:
  *   post:
  *     summary: Agregar un servicio
@@ -38,22 +86,25 @@ router.get('/', getTrainers);
  *           schema:
  *             type: object
  *             required:
- *               - nombre
- *               - categoria
- *               - duracion
- *               - precio
- *               - disponibilidadHoraria
+ *               - name
+ *               - category
+ *               - duration
+ *               - price
+ *               - availability
  *             properties:
- *               nombre:
+ *               name:
  *                 type: string
  *                 example: servicio1
- *               categoria:
+ *               category:
  *                 type: string
  *                 example: boxeo
+ *               duration:
+ *                 type: string
+ *                 example: 50
  *               precio:
  *                 type: integer
  *                 example: 10000
- *               disponibilidadHoraria:
+ *               availability:
  *                 type: string
  *                 example: noche
  *     responses:
@@ -68,19 +119,19 @@ router.get('/', getTrainers);
  *                    type: string
  *                    format: uuid
  *                    example: uuid
- *                  nombre:
+ *                  name:
  *                    type: string
  *                    example: servicio1
- *                  categoria:
+ *                  category:
  *                    type: string
  *                    example: boxeo
- *                  precio:
+ *                  price:
  *                    type: integer
  *                    example: 10000
- *                  disponibilidadHoraria:
+ *                  availability:
  *                    type: string
  *                    example: noche
- *                  publicado:
+ *                  published:
  *                    type: boolean
  *                    example: false
  *       400:
@@ -122,7 +173,7 @@ router.post("/service", getTrainers);
  *                    type: string
  *                    format: uuid
  *                    example: uuid
- *                  publicado:
+ *                  published:
  *                    type: boolean
  *                    example: true
  *       400:
@@ -164,13 +215,13 @@ router.post("/service-publish/:id", getTrainers);
  *                    type: string
  *                    format: uuid
  *                    example: uuid
- *                  visualizaciones:
+ *                  views:
  *                    type: number
  *                    example: 300
- *                  calificaciones:
+ *                  reviews:
  *                    type: object
  *                    example: {1, 2, 3, 4, 5}
- *                  comentarios:
+ *                  comments:
  *                    type: array
  *                    example: ['El mejor de todos', 'Excelente servicio']
  *       400:
@@ -206,20 +257,20 @@ router.get("/service/:id/statistics", getTrainers);
  *                     type: string
  *                     format: uuid
  *                     example: 550e8400-e29b-41d4-a716-446655440000
- *                   nombre:
+ *                   name:
  *                     type: string
  *                     example: Servicio1
- *                   nombreCliente:
+ *                   clientName:
  *                     type: string
  *                     example: Pepe
- *                   estado:
+ *                   state:
  *                     type: string
  *                     example: pendiente
- *                   fecha:
+ *                   date:
  *                     type: string
  *                     format: date
  *                     example: 2025-12-16
- *                   archivo:
+ *                   file:
  *                     type: string
  *                     example: https://example.com/archivo.pdf
  *       400:
@@ -255,7 +306,7 @@ router.get("/services", getTrainers);
  *                     type: string
  *                     format: uuid
  *                     example: 550e8400-e29b-41d4-a716-446655440000
- *                   estado:
+ *                   state:
  *                     type: string
  *                     example: aceptado
  *       400:
@@ -274,7 +325,7 @@ router.get("/services/:id", getTrainers);
 
 /**
  * @swagger
- * /search/{category}/{zone}/{price}/{mode}/{calificacion}/{duracion}:
+ * /search/{category}/{zone}/{price}/{mode}/{reviews}/{duration}:
  *   get:
  *     summary: Busqueda de entrenadores
  *     parameters:
@@ -299,7 +350,7 @@ router.get("/services/:id", getTrainers);
  *         schema:
  *           type: string
  *       - in: path
- *         name: calificacion
+ *         name: reviews
  *         required: false
  *         schema:
  *           type: string
@@ -322,16 +373,16 @@ router.get("/services/:id", getTrainers);
  *                     type: string
  *                     format: uuid
  *                     example: 550e8400-e29b-41d4-a716-446655440000
- *                   nombreEntrenador:
+ *                   trianerName:
  *                     type: string
  *                     example: Agustin
- *                   nombreClase:
+ *                   className:
  *                     type: string
  *                     example: Pilates
- *                   comentarios:
+ *                   comments:
  *                     type: array
  *                     example: ['El mejor entrenador', 'Excelentes clases']
- *                   precio:
+ *                   price:
  *                     type: number
  *                     example: 15000
  *       400:

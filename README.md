@@ -1,6 +1,6 @@
 # apis-grupo-6
 
-Figma: https://www.figma.com/design/1xDcN1qLUAf701NGl0AcaY/Gym-Client-Based-Website-and-Gym-Management-System-UI-Design--Community-
+Figma: https://www.figma.com/design/1xDcN1qLUAf701NGl0AcaY/EntrenApp?node-id=0-1&p=f&t=xYvQJVp16b0jF6j0-0
 
 ## Pasos para correr el servidor:
 

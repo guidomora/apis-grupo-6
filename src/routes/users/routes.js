@@ -39,11 +39,11 @@ router.get("/", getUsers);
  *           schema:
  *             type: object
  *             required:
- *               - nombre
- *               - apellido
- *               - correo
+ *               - name
+ *               - lastname
+ *               - email
  *               - password
- *               - fechaNacimiento
+ *               - birth
  *             properties:
  *               name:
  *                 type: string
@@ -51,13 +51,13 @@ router.get("/", getUsers);
  *               apellido:
  *                 type: string
  *                 example: UserLastname
- *               correo:
+ *               email:
  *                 type: string
  *                 example: user@mail.com
  *               password:
  *                 type: string
  *                 example: hola12345
- *               fechaNacimiento:
+ *               birth:
  *                 type: Date
  *                 example: 10-05-1990
  *     responses:
@@ -100,10 +100,10 @@ router.post("/register", getUsers);
  *           schema:
  *             type: object
  *             required:
- *               - correo
+ *               - email
  *               - password
  *             properties:
- *               correo:
+ *               email:
  *                 type: string
  *                 example: user@mail.com
  *               password:
@@ -226,11 +226,11 @@ router.post("/forgot-password", getUsers);
  *                   example: No se pudieron obtener los datos
  */
 
-router.get("/user/:id", getUsers);
+router.get("/users/:id", getUsers);
 
 /**
  * @swagger
- * /users/{id}/clases:
+ * /users/{id}/classes:
  *   get:
  *     summary: Obtener clases en las que esta anotado el usuario
  *     parameters:
@@ -243,7 +243,7 @@ router.get("/user/:id", getUsers);
  *         description: ID del usuario
  *     responses:
  *       201:
- *         description: clases del usuario
+ *         description: Obtener clases en las que esta anotado el usuario
  *         content:
  *           application/json:
  *             schema:
@@ -252,23 +252,26 @@ router.get("/user/:id", getUsers);
  *                 name:
  *                   type: string
  *                   example: Yoga
- *                 profesor:
+ *                 trainerName:
  *                   type: string
  *                   example: TrainerName
- *                 modalidad:
+ *                 mode:
  *                   type: string
  *                   example: Presencial
- *                 fechaClase:
+ *                 classDate:
  *                   type: string
  *                   format: date
  *                   example: 15-05-2025
- *                 horario:
+ *                 time:
  *                   type: string
  *                   format: string
  *                   example: 14:00pm a 15:00pm
- *                 precio:
+ *                 price:
  *                   type: integer
  *                   example: 10000
+ *                 state:
+ *                   type: string
+ *                   example: aceptado
  *       404:
  *         description: No se pudieron obtener los datos
  *         content:
@@ -281,12 +284,61 @@ router.get("/user/:id", getUsers);
  *                   example: No se pudieron obtener los datos
  */
 
-router.get("/user/:id/clases", getUsers);
-
+router.get("/user/:id/classes", getUsers);
 
 /**
  * @swagger
- * /comentar-puntuar/{id}:
+ * /user/classes/{id}/cancel:
+ *   post:
+ *     summary: Dar de baja una clase
+ *     responses:
+ *       201:
+ *         description: Opinion creada existosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: Yoga
+ *                 trainerName:
+ *                   type: string
+ *                   example: TrainerName
+ *                 mode:
+ *                   type: string
+ *                   example: Presencial
+ *                 classDate:
+ *                   type: string
+ *                   format: date
+ *                   example: 15-05-2025
+ *                 time:
+ *                   type: string
+ *                   format: string
+ *                   example: 14:00pm a 15:00pm
+ *                 price:
+ *                   type: integer
+ *                   example: 10000
+ *                 state:
+ *                   type: string
+ *                   example: cancelada
+ *       400:
+ *         description: Error al cancelar una clase
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al crear opinion
+ */
+
+router.post("/user/classes/:id/cancel", getUsers);
+
+/**
+ * @swagger
+ * /review/{id}:
  *   post:
  *     summary: Comentar y puntuar a un coach
  *     requestBody:
@@ -296,8 +348,8 @@ router.get("/user/:id/clases", getUsers);
  *           schema:
  *             type: object
  *             required:
- *               - puntuacion
- *               - comentario
+ *               - review
+ *               - comment
  *             properties:
  *               puntuacion:
  *                 type: integer
@@ -313,10 +365,10 @@ router.get("/user/:id/clases", getUsers);
  *             schema:
  *               type: object
  *               properties:
- *                 puntuacion:
+ *                 review:
  *                   type: integer
  *                   example: 4
- *                 comentario:
+ *                 comment:
  *                   type: string
  *                   example: clases dinamicas y divertidas!
  *       400:
@@ -331,11 +383,11 @@ router.get("/user/:id/clases", getUsers);
  *                   example: Error al crear opinion
  */
 
-router.post("/comentar-puntuar/:id", getUsers);
+router.post("/review/:id", getUsers);
 
 /**
  * @swagger
- * /entrenadores/{id}/documents:
+ * /trainers/{id}/documents:
  *   get:
  *     summary: Obtener lista de archivos PDF de un profesor por ID
  *     parameters:
@@ -366,7 +418,7 @@ router.post("/comentar-puntuar/:id", getUsers);
  *       404:
  *         description: Profesor no encontrado o sin archivos
  */
-router.get('/entrenadores/:id/documents', getUsers);
+router.get('/trainers/:id/documents', getUsers);
 
 
 
