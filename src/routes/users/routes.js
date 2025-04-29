@@ -331,7 +331,7 @@ router.get("/user/:id/classes", getUsers);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Error al crear opinion
+ *                   example: Error al cancelar una clase
  */
 
 router.post("/user/classes/:id/cancel", getUsers);
