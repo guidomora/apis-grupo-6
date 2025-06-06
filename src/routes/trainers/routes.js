@@ -3,6 +3,8 @@ const router = express.Router();
 const { getTrainers } = require('../../controller/trainers/controller');
 
 
+
+
 /**
  * @swagger
  * /trainers:
