@@ -1,4 +1,5 @@
-const userService = require('../../services/userService');
+const userService = require("../../services/userService");
+const User = require("../../models/user");
 
 exports.getAllUsers = (req, res) => {
   const users = userService.getAllUsers();
@@ -6,12 +7,37 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.getUserById = (req, res) => {
-  const user = userService.getUserById(req.params.id);
-  if (!user) return res.status(404).json({ message: 'User not found' });
+  const user = userService.getUserById(req.prams.id);
+  if (!user) return res.status(404).json({ message: "User not found" });
   res.json(user);
 };
 
-exports.createUser = (req, res) => {
-  const newUser = userService.createUser(req.body);
-  res.status(201).json(newUser);
+const createUser = async (req, res) => {
+  try {
+    const { name, lastName, mail, password, birth, role } = req.body;
+
+    const emailExists = await User.findOne({ mail });
+    if (emailExists) {
+      return res.status(400).json({
+        message: "El correo ya esta registrado",
+      });
+    }
+
+    const user = new User({ name, lastName, mail, password, birth, role });
+    await user.save();
+    res.status(201).json({
+      message: "Usuario creado correctamente",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  createUser,
 };

@@ -8,9 +8,10 @@ const userController = require('../../controller/users/userController');
 
 
 
-router.get('/', userController.getAllUsers);
-router.get('/:id', userController.getUserById);
-router.post('/', userController.createUser);
+
+// router.get('/', userController.getAllUsers);
+// router.get('/:id', userController.getUserById);
+// router.post('/', userController.createUser);
 
 
 /**
@@ -97,7 +98,7 @@ router.get("/", getUsers);
  *                   example: Error al crear usuario
  */
 
-router.post("/register", getUsers);
+router.post("/register", userController.createUser); //TODO: llamada al controller
 
 /**
  * @swagger
