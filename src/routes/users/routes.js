@@ -8,7 +8,7 @@ const userController = require('../../controller/users/userController');
 
 //Metodos HTTP
 router.post('/register', userController.createUser);  //Crear usuario
-router.post('/login', userController.createUser);     //Login usuario
+router.post('/login', userController.loginUser);     //Login usuario
 
 
 

@@ -14,7 +14,7 @@ exports.getUserById = (req, res) => {
 
 
 //CREAR USUARIO
-const createUser = async (req, res) => {
+ const createUser = async (req, res) => {
   try {
     const { name, lastName, mail, password, birth, role } = req.body;
 
@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
 };
 
 //LOGIN USUARIO
-const loginUser =  async (req, res) => {
+ const loginUser =  async (req, res) => {
   try {
     const {mail, password} = req.body;
 
@@ -85,4 +85,5 @@ const loginUser =  async (req, res) => {
 
 module.exports = {
   createUser,
+  loginUser,
 };
