@@ -77,6 +77,36 @@ exports.getUserById = (req, res) => {
 
 }
 
+//CONTRASEÑA OLVIDADA
+ const forgorPassword = async (req,res)=>{ 
+  try {
+    const {email} = req.body;
+    const user =  await User.findOne({mail: email})
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuario no encontrado"
+      });
+    }
+
+    //Esto sería una simulacion de envio de correo, tendriamos que implementar al
+    return res.status(200).json({
+      message: "Se ha enviado un correo con instrucciones"
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message
+    })
+    
+  }
+
+
+
+}
+
 
 
 
