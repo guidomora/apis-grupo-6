@@ -6,12 +6,48 @@ const { getUsers } = require("../../controller/users/controller");
 
 const userController = require('../../controller/users/userController');
 
+//Metodos HTTP
+router.post('/register', userController.createUser);  //Crear usuario
+router.post('/login', userController.createUser);     //Login usuario
+
 
 
 
 // router.get('/', userController.getAllUsers);
 // router.get('/:id', userController.getUserById);
-// router.post('/', userController.createUser);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
