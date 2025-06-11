@@ -10,6 +10,8 @@ Figma: https://www.figma.com/design/1xDcN1qLUAf701NGl0AcaY/EntrenApp?node-id=0-1
 
 - opcional para correrlo en modo produccion: `npm run start`
 
+3) Duplicar el archivo `.env.template` renombrarlo a `.env` y agregarle las variables de entorno
+
 ## Ver Swagger:
 
 mientras el servidor este corriendo abrir `http://localhost:3000/api/docs/` en el navegador
