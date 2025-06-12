@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { getTrainers } = require('../../controller/trainers/controller');
+const trainerController = require('../../controller/users/trainerController');
 
 
+//Metodos HTTP
 
 
 /**

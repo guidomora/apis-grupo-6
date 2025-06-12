@@ -1,9 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { getUsers } = require("../../controller/users/controller");
-
-
-
 const userController = require('../../controller/users/userController');
 
 //Metodos HTTP
