@@ -4,11 +4,11 @@
 - Login usuario
 - Contraseña olvidada
 - Obtener usuario por su id
+- Agregar un servicio
 
 ### Endpoints que faltan: 
 - Obtener todos los entrenadores
 - Obtener info de un entrenador
-- Agregar un servicio
 - Publicar o despublicar un servicio
 - Estadisticas de un servicio
 - Servicios activos

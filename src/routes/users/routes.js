@@ -71,7 +71,7 @@ router.get('/:id', userController.getUserById)  // usuario por id
  *                     example: User1
  */
 
-router.get("/", getUsers);
+// router.get("/", getUsers);
 
 /**
  * @swagger
@@ -181,7 +181,7 @@ router.post("/register", userController.createUser); //TODO: llamada al controll
  *                   example: Error ingresar. Correo o contraseña incorrectos
  */
 
-router.post("/login", getUsers);
+// router.post("/login", getUsers);
 
 
 /**
@@ -224,7 +224,7 @@ router.post("/login", getUsers);
  *                   type: string
  *                   example: Usuario no encontrado
  */
-router.post("/forgot-password", getUsers);
+// router.post("/forgot-password", getUsers);
 
 /**
  * @swagger
@@ -272,7 +272,7 @@ router.post("/forgot-password", getUsers);
  *                   example: No se pudieron obtener los datos
  */
 
-router.get("/users/:id", getUsers);
+// router.get("/users/:id", getUsers);
 
 /**
  * @swagger
@@ -330,7 +330,7 @@ router.get("/users/:id", getUsers);
  *                   example: No se pudieron obtener los datos
  */
 
-router.get("/user/:id/classes", getUsers);
+// router.get("/user/:id/classes", getUsers);
 
 /**
  * @swagger
@@ -380,7 +380,7 @@ router.get("/user/:id/classes", getUsers);
  *                   example: Error al cancelar una clase
  */
 
-router.post("/user/classes/:id/cancel", getUsers);
+// router.post("/user/classes/:id/cancel", getUsers);
 
 /**
  * @swagger
@@ -429,7 +429,7 @@ router.post("/user/classes/:id/cancel", getUsers);
  *                   example: Error al crear opinion
  */
 
-router.post("/review/:id", getUsers);
+// router.post("/review/:id", getUsers);
 
 /**
  * @swagger
@@ -464,7 +464,7 @@ router.post("/review/:id", getUsers);
  *       404:
  *         description: Profesor no encontrado o sin archivos
  */
-router.get('/trainers/:id/documents', getUsers);
+// router.get('/trainers/:id/documents', getUsers);
 
 
 

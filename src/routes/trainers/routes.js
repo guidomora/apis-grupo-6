@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const trainerController = require('../../controller/users/trainerController');
+// const trainerController = require('../../controller/users/trainerController');
 
 
 //Metodos HTTP
@@ -27,7 +27,7 @@ const trainerController = require('../../controller/users/trainerController');
  *                     type: string
  */
 
-router.get('/', getTrainers);
+// router.get('/', getTrainers);
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ router.get('/', getTrainers);
  *                   example: Error al obtener estadisticas
  */
 
-router.get("/trainers/:id", getTrainers);
+// router.get("/trainers/:id", getTrainers);
 
 /**
  * @swagger
@@ -149,7 +149,7 @@ router.get("/trainers/:id", getTrainers);
  *                   example: Error al crear el servicio
  */
 
-router.post("/service", getTrainers);
+// router.post("/service", getTrainers);
 
 /**
  * @swagger
@@ -191,7 +191,7 @@ router.post("/service", getTrainers);
  *                   example: Servicio publicado
  */
 
-router.post("/service-publish/:id", getTrainers);
+// router.post("/service-publish/:id", getTrainers);
 
 /**
  * @swagger
@@ -239,7 +239,7 @@ router.post("/service-publish/:id", getTrainers);
  *                   example: Error al obtener estadisticas
  */
 
-router.get("/service/:id/statistics", getTrainers);
+// router.get("/service/:id/statistics", getTrainers);
 
 /**
  * @swagger
@@ -288,7 +288,7 @@ router.get("/service/:id/statistics", getTrainers);
  *                   example: Error al obtener servicios
  */
 
-router.get("/services", getTrainers);
+// router.get("/services", getTrainers);
 
 /**
  * @swagger
@@ -324,7 +324,7 @@ router.get("/services", getTrainers);
  *                   example: Error al obtener aceptar o rechazar un servicio
  */
 
-router.get("/services/:id", getTrainers);
+// router.get("/services/:id", getTrainers);
 
 /**
  * @swagger
@@ -400,6 +400,6 @@ router.get("/services/:id", getTrainers);
  *                   example: Error al obtener servicios
  */
 
-router.get("/search/:category/:zone/:price/:mode/:calificacion/:duracion", getTrainers);
+// router.get("/search/:category/:zone/:price/:mode/:calificacion/:duracion", getTrainers);
 
 module.exports = router;

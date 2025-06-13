@@ -1,0 +1,41 @@
+const { Schema, model } = require("mongoose");
+
+const ServiceSchema = Schema({
+  name: {
+    type: String,
+    required: [true, "name is required"],
+  },
+  category: {
+    type: String,
+    required: [true, "category is required"],
+  },
+  duration: {
+    type: Number,
+    required: [true, "duration is required"],
+  },
+  price: {
+    type: Number,
+    required: [true, "price is required"],
+  },
+  time: {
+    type: String,
+    required: true,
+    enum: ["MAÑANA", "NOCHE", "TARDE"],
+  },
+  published: {
+    type: Boolean,
+    default: false,
+  },
+  trainer: {
+    type: Schema.Types.ObjectId,
+    ref: "Trainer",
+    required: true,
+  },
+});
+
+ServiceSchema.methods.toJSON = function () {
+  const { __v, password, ...user } = this.toObject();
+  return user;
+};
+
+module.exports = model("Service", ServiceSchema);
