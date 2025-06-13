@@ -28,7 +28,7 @@ const ServiceSchema = Schema({
   },
   trainer: {
     type: Schema.Types.ObjectId,
-    ref: "Trainer",
+    ref: "User",
     required: true,
   },
 });

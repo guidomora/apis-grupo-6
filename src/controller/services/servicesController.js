@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 const Service = require("../../models/service");
+const User = require("../../models/user");
 
 const createService = async (req, res) => {
   try {
     const { name, category, duration, price, time, published, trainerId } =
       req.body;
 
-    const emailExists = await User.findOne({ mail });
-    if (emailExists) {
+    const trainer = await User.findById(trainerId);
+    if (!trainer) {
       return res.status(400).json({
-        message: "El correo ya esta registrado",
+        message: "El entrenador no existe",
       });
     }
 
@@ -20,12 +21,14 @@ const createService = async (req, res) => {
       price,
       time,
       published,
-      trainerId,
+      trainer: trainerId,
     });
+
     await service.save();
+
     res.status(201).json({
       message: "Servicio creado correctamente",
-      user,
+      service,
     });
   } catch (error) {
     console.error(error);
