@@ -39,6 +39,42 @@ const createService = async (req, res) => {
   }
 };
 
+
+const postUnpostService = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
+    const service = await Service.findById(id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Servicio no encontrado",
+      });
+    }
+
+    service.published = !service.published;
+    await service.save();
+
+    return res.status(200).json({
+      message: `Servicio ${
+        service.published ? "publicado" : "despublicado"
+      } correctamente`,
+      service,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createService,
+  postUnpostService,
 };

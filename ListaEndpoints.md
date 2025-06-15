@@ -5,11 +5,12 @@
 - Contraseña olvidada
 - Obtener usuario por su id
 - Agregar un servicio
+- Publicar o despublicar un servicio
+
 
 ### Endpoints que faltan: 
 - Obtener todos los entrenadores
 - Obtener info de un entrenador
-- Publicar o despublicar un servicio
 - Estadisticas de un servicio
 - Servicios activos
 - Aceptar o rechazar un servicio
