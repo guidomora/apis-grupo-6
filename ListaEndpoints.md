@@ -3,14 +3,13 @@
 - Crear usuario
 - Login usuario
 - Contraseña olvidada
-- Obtener usuario por su id
+- Obtener usuario por su id / Obtener info de un entrenador
 - Agregar un servicio
 - Publicar o despublicar un servicio
-
+- Dejar review a un entrenador
 
 ### Endpoints que faltan: 
 - Obtener todos los entrenadores
-- Obtener info de un entrenador
 - Estadisticas de un servicio
 - Servicios activos
 - Aceptar o rechazar un servicio
