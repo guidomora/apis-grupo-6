@@ -7,6 +7,7 @@
 - Agregar un servicio
 - Publicar o despublicar un servicio
 - Dejar review a un entrenador
+- Get reviews de un entrenador
 
 ### Endpoints que faltan: 
 - Obtener todos los entrenadores
