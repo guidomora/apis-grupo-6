@@ -6,8 +6,8 @@ const userController = require('../../controller/users/userController');
 router.post('/register', userController.createUser);  //Crear usuario
 router.post('/login', userController.loginUser);     //Login usuario
 router.post('/forgot-password', userController.forgotPassword)  //Recuperar mail
+router.get('/trainers', userController.getAllTrainers)
 router.get('/:id', userController.getUserById)  // usuario por id
-
 
 
 

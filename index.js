@@ -7,9 +7,9 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/docs/swagger");
 
 const userRoutes = require("./src/routes/users/routes");
-const trainerRoutes = require("./src/routes/trainers/routes");
 const servicesRoutes = require("./src/routes/services/routes");
 const reviewsRoutes = require("./src/routes/reviews/reviews");
+const bookingRoutes = require("./src/routes/bookings/routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,9 +31,9 @@ app.use(express.json());
 
 // Rutas
 app.use("/api/users", userRoutes);
-app.use("/api/trainers", trainerRoutes);
 app.use("/api/services", servicesRoutes);
 app.use("/api/reviews", reviewsRoutes);
+app.use("/api/booking", bookingRoutes);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Start server

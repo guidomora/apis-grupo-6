@@ -8,9 +8,10 @@
 - Publicar o despublicar un servicio
 - Dejar review a un entrenador
 - Get reviews de un entrenador
+- Obtener todos los entrenadores
+
 
 ### Endpoints que faltan: 
-- Obtener todos los entrenadores
 - Estadisticas de un servicio
 - Servicios activos
 - Aceptar o rechazar un servicio
