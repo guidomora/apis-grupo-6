@@ -3,27 +3,23 @@ const { Schema, model } = require("mongoose");
 const BookingSchema = Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "User", // El que contrata
+    ref: "User",
     required: true,
   },
   service: {
     type: Schema.Types.ObjectId,
-    ref: "Service", // El servicio contratado
+    ref: "Service",
     required: true,
   },
   trainer: {
     type: Schema.Types.ObjectId,
-    ref: "User", // El entrenador que lo brinda
+    ref: "User",
     required: true,
   },
   status: {
     type: String,
-    enum: ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"],
+    enum: ["PENDING", "CONFIRMED", "CANCELLED"],
     default: "PENDING",
-  },
-  date: {
-    type: Date, // Cuándo se programó la clase/servicio
-    required: true,
   },
   createdAt: {
     type: Date,

@@ -17,10 +17,13 @@ const ServiceSchema = Schema({
     type: Number,
     required: [true, "price is required"],
   },
+  date: { // yyyy-mm-dd
+    type: Date,
+    required: true,
+  },
   time: {
     type: String,
     required: true,
-    enum: ["MAÑANA", "NOCHE", "TARDE"],
   },
   published: {
     type: Boolean,

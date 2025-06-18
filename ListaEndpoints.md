@@ -9,14 +9,15 @@
 - Dejar review a un entrenador
 - Get reviews de un entrenador
 - Obtener todos los entrenadores
+- Contratar un servicio
+- Aceptar o rechazar un servicio (trainer)
+- Obtener clases en las que esta anotado el usuario
 
 
 ### Endpoints que faltan: 
 - Estadisticas de un servicio
 - Servicios activos
-- Aceptar o rechazar un servicio
 - Busqueda de entrenadores
 - Obtener datos personales del usuario
-- Obtener clases en las que esta anotado el usuario
-- Dar de baja una clase
+- Dar de baja una clase (trainer)
 - Obtener lista de archivos PDF de un profesor por ID

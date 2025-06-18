@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Bookings = require("../../models/booking");
 const mongoose = require("mongoose");
 
 //CREAR USUARIO
@@ -117,11 +118,37 @@ const getAllTrainers = async (req, res) => {
   try {
     const trainers = await User.find({ role: "TRAINER_ROLE" });
 
-    if (trainers.lenght == 0) {
+    if (trainers.length == 0) {
       return res.status(200).json({ message: "No hay entrenadores" });
     }
 
     return res.status(200).json({ trainers });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+};
+
+const getAllServicesFromUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.findById({ _id: userId });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuario no encontrado",
+      });
+    }
+
+    const bookings = await Bookings.find({ user: userId });
+
+    if (bookings.length == 0) {
+      return res.status(200).json({ message: "No hay servicios contratados" });
+    }
+
+    return res.status(200).json({ bookings });
   } catch (error) {
     return res.status(500).json({
       message: "Error interno del servidor",
@@ -135,5 +162,6 @@ module.exports = {
   loginUser,
   forgotPassword,
   getUserById,
-  getAllTrainers
+  getAllTrainers,
+  getAllServicesFromUser
 };

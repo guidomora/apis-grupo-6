@@ -4,7 +4,7 @@ const User = require("../../models/user");
 
 const createService = async (req, res) => {
   try {
-    const { name, category, duration, price, time, published, trainerId } =
+    const { name, category, duration, price, time, published, trainerId, date } =
       req.body;
 
     const trainer = await User.findById(trainerId);
@@ -22,6 +22,7 @@ const createService = async (req, res) => {
       time,
       published,
       trainer: trainerId,
+      date
     });
 
     await service.save();
