@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const userController = require('../../controller/users/userController');
+const validateJWT = require('../../middlewares/validateJwt');
 
 //Metodos HTTP
-router.post('/register', userController.createUser);  //Crear usuario
-router.post('/login', userController.loginUser);     //Login usuario
-router.post('/forgot-password', userController.forgotPassword)  //Recuperar mail
-router.get('/trainers', userController.getAllTrainers)
-router.get('/bookings/:id', userController.getAllServicesFromUser)
-router.get('/:id', userController.getUserById)  // usuario por id
+router.post('/register', validateJWT, userController.createUser);  //Crear usuario
+router.post('/login', validateJWT, userController.loginUser);     //Login usuario
+router.post('/forgot-password', validateJWT, userController.forgotPassword)  //Recuperar mail
+router.get('/trainers', validateJWT, userController.getAllTrainers)
+router.get('/bookings/:id', validateJWT, userController.getAllServicesFromUser)
+router.get('/:id', validateJWT, userController.getUserById)  // usuario por id
 
 
 

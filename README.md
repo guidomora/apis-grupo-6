@@ -15,3 +15,10 @@ Figma: https://www.figma.com/design/1xDcN1qLUAf701NGl0AcaY/EntrenApp?node-id=0-1
 ## Ver Swagger:
 
 mientras el servidor este corriendo abrir `http://localhost:3000/api/docs/` en el navegador
+
+## Usar Token
+
+1) Hacer Login con un usuario `localhost:3000/api/users/login` en la response vamos a ver el token
+
+2) Copiar el token del login para agregarlo como metodo de auth en postman
+ - Auth > Auth type > Bearer Token > pegar el token en el input

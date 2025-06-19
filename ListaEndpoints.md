@@ -12,6 +12,7 @@
 - Contratar un servicio
 - Aceptar o rechazar un servicio (trainer)
 - Obtener clases en las que esta anotado el usuario
+- JWT listo
 
 
 ### Endpoints que faltan: 

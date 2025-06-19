@@ -1,6 +1,7 @@
-const User = require("../../models/user");
 const Bookings = require("../../models/booking");
+const User = require("../../models/user");
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken');
 
 //CREAR USUARIO
 const createUser = async (req, res) => {
@@ -14,11 +15,30 @@ const createUser = async (req, res) => {
       });
     }
 
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message:
+          "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, un número y un carácter especial",
+      });
+    }
+
     const user = new User({ name, lastName, mail, password, birth, role });
     await user.save();
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
+
     res.status(201).json({
       message: "Usuario creado correctamente",
       user,
+      token,
     });
   } catch (error) {
     console.error(error);
@@ -34,7 +54,6 @@ const loginUser = async (req, res) => {
   try {
     const { mail, password } = req.body;
 
-    //Buscar usuario por correo
     const user = await User.findOne({ mail });
     if (!user) {
       return res.status(400).json({
@@ -42,17 +61,24 @@ const loginUser = async (req, res) => {
       });
     }
 
-    //Comparar conntraseña
     if (user.password !== password) {
       return res.status(401).json({
         message: "Contraseña incorrecta",
       });
     }
 
-    //Si no ocurre nada raro, se loguea exitosamente
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
+
     return res.status(200).json({
       message: "Inicio de sesión exitoso",
       user,
+      token,
     });
   } catch (error) {
     console.error(error);
@@ -163,5 +189,5 @@ module.exports = {
   forgotPassword,
   getUserById,
   getAllTrainers,
-  getAllServicesFromUser
+  getAllServicesFromUser,
 };

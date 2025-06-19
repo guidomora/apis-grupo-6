@@ -18,16 +18,17 @@ const UserSchema = Schema({
   password: {
     type: String,
     required: [true, "password is required"],
+    minlength: [8, "La contraseña debe tener al menos 8 caracteres"],
   },
   role: {
     type: String,
     required: true,
     enum: ["USER_ROLE", "TRAINER_ROLE"],
   },
-  birth:{
-    type:Date,
-    required:true
-  }
+  birth: {
+    type: Date,
+    required: true,
+  },
 });
 
 UserSchema.methods.toJSON = function () {
