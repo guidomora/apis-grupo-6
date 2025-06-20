@@ -4,7 +4,7 @@ const User = require("../../models/user");
 
 const createService = async (req, res) => {
   try {
-    const { name, category, duration, price, time, published, trainerId, date } =
+    const { name, category,zone, mode, duration, price, time, published, trainerId, date } =
       req.body;
 
     const trainer = await User.findById(trainerId);
@@ -17,6 +17,8 @@ const createService = async (req, res) => {
     const service = new Service({
       name,
       category,
+      zone,
+      mode,
       duration,
       price,
       time,
@@ -75,7 +77,36 @@ const postUnpostService = async (req, res) => {
   }
 };
 
+const searchService = async (req, res) => {
+  try {
+    const { category, zone, mode, duration, price } = req.query;
+
+    const filters = {};
+
+    if (category) filters.category = category;
+    if (zone) filters.zone = zone;
+    if (mode) filters.mode = mode;
+    if (duration) filters.duration = Number(duration);
+    if (price) filters.price = { $lte: Number(price) }; // precio hasta
+
+    const services = await Service.find(filters).populate("trainer", "-password");
+
+    if (services.length === 0) {
+      return res.status(200).json({ message: "No se encontraron servicios con esos filtros" });
+    }
+
+    res.status(200).json({ services });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al filtrar servicios",
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   createService,
   postUnpostService,
+  searchService
 };

@@ -4,7 +4,7 @@ const userController = require('../../controller/users/userController');
 const validateJWT = require('../../middlewares/validateJwt');
 
 //Metodos HTTP
-router.post('/register', validateJWT, userController.createUser);  //Crear usuario
+router.post('/register', userController.createUser);  //Crear usuario
 router.post('/login', validateJWT, userController.loginUser);     //Login usuario
 router.post('/forgot-password', validateJWT, userController.forgotPassword)  //Recuperar mail
 router.get('/trainers', validateJWT, userController.getAllTrainers)

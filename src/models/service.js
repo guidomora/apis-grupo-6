@@ -8,6 +8,26 @@ const ServiceSchema = Schema({
   category: {
     type: String,
     required: [true, "category is required"],
+    enum: ["GYM", "BOXEO", "ESTIRAMIENTO", "YOGA", "PILATES", "FUNCIONAL"],
+  },
+  zone: {
+    type: String,
+    required: [true, "zone is required"],
+    enum: [
+      "PALERMO",
+      "BELGRANO",
+      "CABALLITO",
+      "ALMAGRO",
+      "PARQUE_PATRICIOS",
+      "BOEDO",
+      "AVELLANEDA",
+      "ONLINE"
+    ],
+  },
+  mode: {
+    type: String,
+    required: [true, "mode is required"],
+    enum: ["PRESENCIAL", "ONLINE"],
   },
   duration: {
     type: Number,
@@ -17,7 +37,8 @@ const ServiceSchema = Schema({
     type: Number,
     required: [true, "price is required"],
   },
-  date: { // yyyy-mm-dd
+  date: {
+    // yyyy-mm-dd
     type: Date,
     required: true,
   },
@@ -36,7 +57,7 @@ const ServiceSchema = Schema({
   },
 });
 
-ServiceSchema.methods.toJSON = function () {
+ServiceSchema.methods.toJSON = function() {
   const { __v, password, ...user } = this.toObject();
   return user;
 };

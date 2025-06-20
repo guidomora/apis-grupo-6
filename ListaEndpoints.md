@@ -13,6 +13,7 @@
 - Aceptar o rechazar un servicio (trainer)
 - Obtener clases en las que esta anotado el usuario
 - JWT listo
+- Filtrar clases segun zona, duracion, precio, modalidad, categoria
 
 
 ### Endpoints que faltan: 
