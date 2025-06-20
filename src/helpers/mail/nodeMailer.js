@@ -1,13 +1,20 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: process.env.MAIL_USER,
+  //     pass: process.env.MAIL_PASS,
+  //   },
   service: "gmail",
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    type: "OAuth2",
+    user: "entrenapapp@gmail.com",
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
   },
 });
-
 
 const sendResetEmail = async (to, resetLink) => {
   await transporter.sendMail({
@@ -20,7 +27,6 @@ const sendResetEmail = async (to, resetLink) => {
   });
 };
 
-
 module.exports = {
-    sendResetEmail
-}
+  sendResetEmail,
+};
