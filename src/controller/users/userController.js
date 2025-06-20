@@ -1,7 +1,8 @@
 const Bookings = require("../../models/booking");
 const User = require("../../models/user");
 const mongoose = require("mongoose");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const { sendResetEmail } = require('../../helpers/mail/nodeMailer');
 
 //CREAR USUARIO
 const createUser = async (req, res) => {
@@ -15,8 +16,7 @@ const createUser = async (req, res) => {
       });
     }
 
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         message:
@@ -91,26 +91,50 @@ const loginUser = async (req, res) => {
 
 //CONTRASEÑA OLVIDADA
 const forgotPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ mail: email });
+  const { mail } = req.body;
 
+  const user = await User.findOne({ mail });
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+  });
+
+  const resetLink = `https://localhost:3000/reset-password/${token}`;
+  await sendResetEmail(user.mail, resetLink);
+
+  return res.status(200).json({ message: "Enlace de recuperación enviado" });
+};
+
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({
-        message: "Usuario no encontrado",
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        message:
+          "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, un número y un carácter especial",
       });
     }
 
-    //Esto sería una simulacion de envio de correo, tendriamos que implementar al
-    return res.status(200).json({
-      message: "Se ha enviado un correo con instrucciones",
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
+    user.password = newPassword;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Contraseña actualizada correctamente" });
+  } catch (err) {
+    return res.status(400).json({ message: "Token inválido o expirado" });
   }
 };
 
@@ -190,4 +214,6 @@ module.exports = {
   getUserById,
   getAllTrainers,
   getAllServicesFromUser,
+  forgotPassword,
+  resetPassword
 };

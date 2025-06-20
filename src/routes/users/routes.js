@@ -8,6 +8,8 @@ router.post('/register', userController.createUser);  //Crear usuario
 router.post('/login', validateJWT, userController.loginUser);     //Login usuario
 router.post('/forgot-password', validateJWT, userController.forgotPassword)  //Recuperar mail
 router.get('/trainers', validateJWT, userController.getAllTrainers)
+router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password/:token', userController.resetPassword);
 router.get('/bookings/:id', validateJWT, userController.getAllServicesFromUser)
 router.get('/:id', validateJWT, userController.getUserById)  // usuario por id
 
