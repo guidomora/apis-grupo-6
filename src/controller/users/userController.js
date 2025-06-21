@@ -51,6 +51,7 @@ const createUser = async (req, res) => {
 
 //LOGIN USUARIO
 const loginUser = async (req, res) => {
+  
   try {
     const { mail, password } = req.body;
 
