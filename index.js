@@ -8,7 +8,7 @@ const swaggerSpec = require("./src/docs/swagger");
 
 const userRoutes = require("./src/routes/users/routes");
 const servicesRoutes = require("./src/routes/services/routes");
-const reviewsRoutes = require("./src/routes/reviews/reviews");
+const reviewsRoutes = require("./src/routes/reviews/routes");
 const bookingRoutes = require("./src/routes/bookings/routes");
 
 const app = express();

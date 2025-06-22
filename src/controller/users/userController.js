@@ -108,8 +108,7 @@ const forgotPassword = async (req, res) => {
 
   return res.status(200).json({ message: "Enlace de recuperación enviado" });
 };
-
-
+ 
 //RESETEAR CONTRASEÑA
 const resetPassword = async (req, res) => {
   const { token } = req.params;
@@ -184,7 +183,6 @@ const getAllTrainers = async (req, res) => {
     });
   }
 };
-
 
 //OBTENER TODOS LOS SERVICIOS DE LOS ENTRENADORES
 const getAllServicesFromUser = async (req, res) => {

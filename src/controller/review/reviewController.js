@@ -2,6 +2,7 @@ const Review = require("../../models/review");
 const User = require("../../models/user");
 const mongoose = require("mongoose");
 
+// CREAR UNA RESEÑA
 const createReview = async (req, res) => {
   try {
     const { rating, comment, author, trainer } = req.body;
@@ -30,6 +31,7 @@ const createReview = async (req, res) => {
   }
 };
 
+// OBTENER REVIEWS DE UN ENTRENADOR
 const getTrainerReviews = async (req, res) => {
   try {
     const trainerId = req.params.id;

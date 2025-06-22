@@ -3,6 +3,7 @@ const Service = require("../../models/service");
 const Booking = require("../../models/booking");
 const mongoose = require("mongoose");
 
+//CREAR UNA RESERVA
 const createBooking = async (req, res) => {
   const { serviceId } = req.body;
   const userId = req.params.id;
@@ -36,6 +37,7 @@ const createBooking = async (req, res) => {
   }
 };
 
+// ACEPTAR O RECHAZAR UNA RESERVA
 const acceptRejectBooking = async (req, res) => {
   const { bookingId, action } = req.body;
   const userId = req.params.id;

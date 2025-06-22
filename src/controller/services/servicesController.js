@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Service = require("../../models/service");
 const User = require("../../models/user");
 
+
+// CREAR UN SERVICIO
 const createService = async (req, res) => {
   try {
     const { name, category,zone, mode, duration, price, time, published, trainerId, date } =
@@ -43,6 +45,7 @@ const createService = async (req, res) => {
 };
 
 
+// PUBLICAR O DESPUBLICAR
 const postUnpostService = async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,6 +80,7 @@ const postUnpostService = async (req, res) => {
   }
 };
 
+//  BUSCAR SERVICIO
 const searchService = async (req, res) => {
   try {
     const { category, zone, mode, duration, price } = req.query;
@@ -104,6 +108,8 @@ const searchService = async (req, res) => {
     });
   }
 }
+
+
 
 module.exports = {
   createService,
