@@ -15,10 +15,6 @@ router.get('/:id', validateJWT, userController.getUserById)  // usuario por id
 
 
 
-// router.get('/', userController.getAllUsers);
-// router.get('/:id', userController.getUserById);
-
-
 
 
 
