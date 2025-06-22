@@ -103,7 +103,7 @@ const forgotPassword = async (req, res) => {
     expiresIn: "15m",
   });
 
-  const resetLink = `https://localhost:3000/reset-password/${token}`;
+  const resetLink = `http://localhost:5173/reset-password/${token}`;
   await sendResetEmail(user.mail, resetLink);
 
   return res.status(200).json({ message: "Enlace de recuperación enviado" });
