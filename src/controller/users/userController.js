@@ -109,6 +109,8 @@ const forgotPassword = async (req, res) => {
   return res.status(200).json({ message: "Enlace de recuperación enviado" });
 };
 
+
+//RESETEAR CONTRASEÑA
 const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { newPassword } = req.body;
@@ -165,6 +167,7 @@ const getUserById = async (req, res) => {
   }
 };
 
+//OBTENER A TODOS LOS ENTRENADORES
 const getAllTrainers = async (req, res) => {
   try {
     const trainers = await User.find({ role: "TRAINER_ROLE" });
@@ -182,6 +185,8 @@ const getAllTrainers = async (req, res) => {
   }
 };
 
+
+//OBTENER TODOS LOS SERVICIOS DE LOS ENTRENADORES
 const getAllServicesFromUser = async (req, res) => {
   const userId = req.params.id;
   try {
@@ -207,6 +212,11 @@ const getAllServicesFromUser = async (req, res) => {
     });
   }
 };
+
+
+
+
+
 
 module.exports = {
   createUser,

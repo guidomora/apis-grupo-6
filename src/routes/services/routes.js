@@ -3,9 +3,9 @@ const router = express.Router();
 const servicesController = require('../../controller/services/servicesController');
 const validateJWT = require('../../middlewares/validateJwt');
 
-router.post('/', validateJWT, servicesController.createService);
-router.put('/:id', validateJWT, servicesController.postUnpostService)
-router.get('/search', servicesController.searchService)
+router.post('/', validateJWT, servicesController.createService);  //Crear un servicio
+router.put('/:id', validateJWT, servicesController.postUnpostService)  //Eliminar un servicio
+router.get('/search', servicesController.searchService)   //Buscar un servicio
 
 
 module.exports = router;

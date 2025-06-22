@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 
+//Modelo para la reserva/booking
 const BookingSchema = Schema({
   user: {
     type: Schema.Types.ObjectId,

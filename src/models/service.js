@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 
+//Modelo para el servicio
 const ServiceSchema = Schema({
   name: {
     type: String,
