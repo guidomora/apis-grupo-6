@@ -7,6 +7,8 @@ router.post('/', validateJWT, servicesController.createService);  //Crear un ser
 router.put('/:id', validateJWT, servicesController.postUnpostService)  //Eliminar un servicio
 router.get('/search', servicesController.searchService)   //Buscar un servicio
 router.get('/:id', servicesController.getServiceById); // Ver un servicio específico + views++
+router.get('/active', servicesController.getActiveServices); // Obtener servicios activos
+
 
 
 

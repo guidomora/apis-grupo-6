@@ -139,6 +139,18 @@ const getServiceById = async (req, res) => {
   }
 };
 
+//Obtener servicios activos
+const getActiveServices = async (req, res) => {
+  try {
+    const services = await Service.find({ published: true });
+    res.status(200).json(services);
+  } catch (error) {
+    console.error("Error al obtener servicios activos:", error.message);
+    res.status(400).json({
+      message: "Error al obtener servicios"
+    });
+  }
+};
 
 
 
@@ -147,4 +159,5 @@ module.exports = {
   postUnpostService,
   searchService,
   getServiceById,
+  getActiveServices,
 };

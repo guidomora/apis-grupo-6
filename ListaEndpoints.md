@@ -1,5 +1,4 @@
 ### Lista de endpoints hechos:
-
 - Crear usuario
 - Login usuario
 - Contraseña olvidada
@@ -15,7 +14,6 @@
 - JWT listo
 - Filtrar clases segun zona, duracion, precio, modalidad, categoria
 - Estadisticas de un entrenador
-
 
 
 ### Endpoints que faltan: 
