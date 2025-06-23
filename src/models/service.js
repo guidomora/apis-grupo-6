@@ -57,6 +57,11 @@ const ServiceSchema = Schema({
     default: 0,
   },
 
+  sharedFiles: {
+    type: [String], // array de URLs
+    default: [],
+  },
+
   trainer: {
     type: Schema.Types.ObjectId,
     ref: "User",

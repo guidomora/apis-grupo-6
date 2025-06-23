@@ -152,6 +152,32 @@ const getActiveServices = async (req, res) => {
   }
 };
 
+// Obtener lista de archivos compartidos por un entrenador
+const getTrainerFiles = async (req, res) => {
+  try {
+    const trainerId = req.params.id;
+
+    const services = await Service.find({
+      trainer: trainerId,
+      sharedFiles: { $exists: true, $not: { $size: 0 } }
+    }).select("name sharedFiles");
+
+    if (!services.length) {
+      return res.status(200).json({
+        message: "No hay archivos compartidos por este entrenador."
+      });
+    }
+
+    return res.status(200).json({ services });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al obtener los archivos compartidos",
+      error: error.message
+    });
+  }
+};
+
+
 
 
 module.exports = {
@@ -160,4 +186,5 @@ module.exports = {
   searchService,
   getServiceById,
   getActiveServices,
+  getSharedFilesByTrainer,
 };

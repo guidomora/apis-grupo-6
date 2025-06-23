@@ -16,8 +16,8 @@
 - Estadisticas de un entrenador (TESTEAR)
 - Servicios activos (TESTEAR)
 - Dar de baja una clase (trainer) (TESTEAR)
+- Obtener lista de archivos PDF de un profesor por ID (TESTEAR)
 
 
 ### Endpoints que faltan: 
 - Busqueda de entrenadores
-- Obtener lista de archivos PDF de un profesor por ID
