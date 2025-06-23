@@ -48,6 +48,7 @@ router.get('/:id', validateJWT, userController.getUserById)  // usuario por id
 
 
 
+
 /**
  * @swagger
  * /users:

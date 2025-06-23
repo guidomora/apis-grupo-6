@@ -6,6 +6,8 @@ const validateJWT = require('../../middlewares/validateJwt');
 router.post('/', validateJWT, servicesController.createService);  //Crear un servicio
 router.put('/:id', validateJWT, servicesController.postUnpostService)  //Eliminar un servicio
 router.get('/search', servicesController.searchService)   //Buscar un servicio
+router.get('/:id', servicesController.getServiceById); // Ver un servicio específico + views++
+
 
 
 module.exports = router;

@@ -20,6 +20,5 @@
 - Estadisticas de un servicio
 - Servicios activos
 - Busqueda de entrenadores
-- Obtener datos personales del usuario
 - Dar de baja una clase (trainer)
 - Obtener lista de archivos PDF de un profesor por ID

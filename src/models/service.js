@@ -51,6 +51,12 @@ const ServiceSchema = Schema({
     type: Boolean,
     default: false,
   },
+  
+  views: {
+    type: Number,
+    default: 0,
+  },
+
   trainer: {
     type: Schema.Types.ObjectId,
     ref: "User",

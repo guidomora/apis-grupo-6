@@ -224,5 +224,5 @@ module.exports = {
   getAllTrainers,
   getAllServicesFromUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
 };
