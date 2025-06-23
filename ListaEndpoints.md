@@ -14,10 +14,11 @@
 - Obtener clases en las que esta anotado el usuario
 - JWT listo
 - Filtrar clases segun zona, duracion, precio, modalidad, categoria
+- Estadisticas de un entrenador
+
 
 
 ### Endpoints que faltan: 
-- Estadisticas de un servicio
 - Servicios activos
 - Busqueda de entrenadores
 - Dar de baja una clase (trainer)

@@ -12,7 +12,6 @@ const reviewsRoutes = require("./src/routes/reviews/routes");
 const bookingRoutes = require("./src/routes/bookings/routes");
 const statsRoutes = require("./src/routes/stats/routes");
 
-
 const app = express();
 const port = process.env.PORT || 3000;
 

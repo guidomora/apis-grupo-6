@@ -6,16 +6,18 @@ const mongoose = require("mongoose");
 
 //OBTENER ESTADISTICAS DEL ENTRENADOR
 const getTrainerStats = async (req, res) => {
-  const trainerId = req.params.id;
+  const trainerId = req.params.id;  //Obtiene el id del entrenador desde la url
 
+  //Verifica que tenga el formato correcto de mongo
   if (!mongoose.Types.ObjectId.isValid(trainerId)) {
     return res.status(400).json({ message: "ID inválido" });
   }
 
   try {
-    // Servicios del entrenador
+    // Trae todos los servicios que creó ese entrenador
     const services = await Service.find({ trainer: trainerId });
 
+    //Cuenta cuantos estan publicados
     const publishedServicesCount = services.filter(s => s.published).length;
     const totalViews = services.reduce((acc, service) => acc + (service.views || 0), 0);
 
