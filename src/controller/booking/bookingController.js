@@ -77,7 +77,38 @@ const acceptRejectBooking = async (req, res) => {
   }
 };
 
+//CANCELAR UNA CLASE
+const cancelClass = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const booking = await Booking.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Clase no encontrada" });
+    }
+
+    // Si ya está cancelada, no hacemos nada
+    if (booking.status === "CANCELLED") {
+      return res.status(400).json({ message: "La clase ya está cancelada" });
+    }
+
+    booking.status = "CANCELLED";
+    await booking.save();
+
+    res.status(200).json({
+      message: "Clase cancelada correctamente",
+      booking,
+    });
+  } catch (error) {
+    console.error("Error al cancelar la clase:", error.message);
+    res.status(400).json({ message: "Error al cancelar la clase" });
+  }
+};
+
+
 module.exports = {
   createBooking,
   acceptRejectBooking,
+  cancelClass,
 };

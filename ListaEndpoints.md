@@ -15,9 +15,9 @@
 - Filtrar clases segun zona, duracion, precio, modalidad, categoria
 - Estadisticas de un entrenador (TESTEAR)
 - Servicios activos (TESTEAR)
+- Dar de baja una clase (trainer) (TESTEAR)
 
 
 ### Endpoints que faltan: 
 - Busqueda de entrenadores
-- Dar de baja una clase (trainer)
 - Obtener lista de archivos PDF de un profesor por ID
