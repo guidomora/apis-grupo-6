@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Service = require("../../models/service");
 const User = require("../../models/user");
+const mercadopago = require("../../helpers/mercadopago/mercadoPago");
+const { Preference } = require('mercadopago');
 
 
 // CREAR UN SERVICIO
@@ -178,7 +180,31 @@ const getTrainerFiles = async (req, res) => {
 };
 
 
+const servicePayment = async (req, res) => {
+  const { title, unit_price } = req.body;
 
+  const preference = new Preference(mercadopago);
+
+  try {
+    const response = await preference.create({
+      body: {
+        items: [
+          {
+            title,
+            quantity: 1,
+            unit_price: Number(unit_price),
+          },
+        ],
+        purpose: 'wallet_purchase',
+      },
+    });
+
+    return res.json({ preference_id: response.id });
+  } catch (err) {
+    console.error("Error al crear preferencia:", err);
+    return res.status(500).json({ error: "Error al crear preferencia" });
+  }
+}
 
 module.exports = {
   createService,
@@ -186,5 +212,6 @@ module.exports = {
   searchService,
   getServiceById,
   getActiveServices,
-  getSharedFilesByTrainer,
+  getTrainerFiles,
+  servicePayment
 };
