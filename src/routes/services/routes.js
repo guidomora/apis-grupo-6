@@ -9,6 +9,7 @@ router.get('/search', servicesController.searchService)   //Buscar un servicio
 router.get('/:id', servicesController.getServiceById); // Ver un servicio específico + views++
 router.get('/active', servicesController.getActiveServices); // Obtener servicios activos
 router.get("/shared-files/:id", validateJWT, servicesController.getTrainerFiles);  //Obtener los archivos compartidos
+router.post('/create-preference', servicesController.servicePayment);
 
 
 
