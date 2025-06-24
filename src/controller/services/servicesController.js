@@ -206,6 +206,33 @@ const servicePayment = async (req, res) => {
   }
 }
 
+// PATCH /services/upload-file/:id
+const uploadFileToService = async (req, res) => {
+  const { id } = req.params;
+  const { fileUrl } = req.body; // URL del archivo a agregar
+
+  try {
+    const service = await Service.findById(id);
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    service.sharedFiles.push(fileUrl); // agrega al array
+    await service.save();
+
+    return res.status(200).json({
+      message: "Archivo agregado correctamente",
+      sharedFiles: service.sharedFiles,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al agregar el archivo",
+      error: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   createService,
   postUnpostService,
@@ -215,3 +242,5 @@ module.exports = {
   getTrainerFiles,
   servicePayment
 };
+
+
