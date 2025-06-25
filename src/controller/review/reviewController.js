@@ -3,55 +3,56 @@ const User = require("../../models/user");
 const Booking = require("../../models/booking");
 const mongoose = require("mongoose");
 
+// CREAR UNA RESEÑA
 const createReview = async (req, res) => {
   try {
     const { rating, comment, author, trainer, service } = req.body;
 
-    // Validar existencia de usuario y entrenador
+    // Validar existencia
     const authorExists = await User.findById(author);
     const trainerExists = await User.findById(trainer);
     if (!authorExists || !trainerExists) {
       return res.status(400).json({ message: "Usuario o entrenador inexistente" });
     }
 
-    // Verificar que el usuario tenga una clase CONFIRMADA con ese servicio y ese entrenador
+    // Verificar que haya contratado esa clase con ese entrenador y que esté confirmada
     const bookingConfirmed = await Booking.findOne({
       user: author,
       trainer,
       service,
-      status: "CONFIRMED",
+      status: "CONFIRMED"
     });
 
     if (!bookingConfirmed) {
       return res.status(403).json({
-        message: "Solo podés reseñar si tu clase fue confirmada",
+        message: "Solo podés reseñar si tu clase fue confirmada"
       });
     }
 
-    // Intentar crear la reseña (si ya existe, el índice único evita duplicados)
+    // Evitar duplicados por combinación única
     const review = new Review({ rating, comment, author, trainer, service });
     await review.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Reseña creada correctamente",
-      review,
+      review
     });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({
-        message: "Ya dejaste una reseña para esta clase",
+        message: "Ya dejaste una reseña para esta clase"
       });
     }
 
     console.error("Error al crear reseña:", error);
     return res.status(500).json({
       message: "Error interno del servidor",
-      error: error.message,
+      error: error.message
     });
   }
 };
 
-// OBTENER REVIEWS DE UN ENTRENADOR
+// OBTENER TODAS LAS RESEÑAS DE UN ENTRENADOR
 const getTrainerReviews = async (req, res) => {
   try {
     const trainerId = req.params.id;
@@ -66,22 +67,15 @@ const getTrainerReviews = async (req, res) => {
     }
 
     const reviews = await Review.find({ trainer: trainerId })
-      .populate("author", "name lastName")
-      .populate({
-        path: "service",
-        select: "name category date time mode price",
-        strictPopulate: false, // evita error si service fue eliminado
-      });
+      .sort({ createdAt: -1 }) // orden más recientes primero
+      .select("rating comment createdAt");
 
-    // Filtramos reseñas cuyo servicio fue eliminado
-    const filteredReviews = reviews.filter(r => r.service !== null);
-
-    return res.status(200).json({ reviews: filteredReviews });
+    return res.status(200).json({ reviews });
   } catch (error) {
     console.error("Error en getTrainerReviews:", error);
     return res.status(500).json({
       message: "Error al obtener las reseñas del entrenador",
-      error: error.message,
+      error: error.message
     });
   }
 };
