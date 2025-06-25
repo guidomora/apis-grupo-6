@@ -25,24 +25,26 @@ const ReviewSchema = Schema({
   service: {
     type: Schema.Types.ObjectId,
     ref: "Service",
-    required: false, // este campo ya lo usás para relacionar la reseña con un servicio
+    required: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-
-  // Respuesta del entrenador (opcional)
+  // Respuesta del entrenador
   trainerReply: {
-    text: {
-      type: String,
-      maxlength: 500,
-      default: null,
-    },
-    repliedAt: {
-      type: Date,
-      default: null,
-    },
+    type: new Schema({
+      text: {
+        type: String,
+        maxlength: 500,
+        required: true,
+      },
+      repliedAt: {
+        type: Date,
+        default: Date.now,
+      },
+    }, { _id: false }),
+    default: null
   },
 });
 

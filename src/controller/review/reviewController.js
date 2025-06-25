@@ -8,46 +8,43 @@ const createReview = async (req, res) => {
   try {
     const { rating, comment, author, trainer, service } = req.body;
 
-    // Validar existencia
     const authorExists = await User.findById(author);
     const trainerExists = await User.findById(trainer);
     if (!authorExists || !trainerExists) {
       return res.status(400).json({ message: "Usuario o entrenador inexistente" });
     }
 
-    // Verificar que haya contratado esa clase con ese entrenador y que esté confirmada
     const bookingConfirmed = await Booking.findOne({
       user: author,
       trainer,
       service,
-      status: "CONFIRMED"
+      status: "CONFIRMED",
     });
 
     if (!bookingConfirmed) {
       return res.status(403).json({
-        message: "Solo podés reseñar si tu clase fue confirmada"
+        message: "Solo podés reseñar si tu clase fue confirmada",
       });
     }
 
-    // Evitar duplicados por combinación única
     const review = new Review({ rating, comment, author, trainer, service });
     await review.save();
 
     return res.status(201).json({
       message: "Reseña creada correctamente",
-      review
+      review,
     });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({
-        message: "Ya dejaste una reseña para esta clase"
+        message: "Ya dejaste una reseña para esta clase",
       });
     }
 
     console.error("Error al crear reseña:", error);
     return res.status(500).json({
       message: "Error interno del servidor",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -69,14 +66,14 @@ const getTrainerReviews = async (req, res) => {
     const reviews = await Review.find({ trainer: trainerId })
       .sort({ createdAt: -1 })
       .populate("author", "name lastName")
-      .select("rating comment createdAt reply");
+      .select("rating comment createdAt trainerReply");
 
     return res.status(200).json({ reviews });
   } catch (error) {
     console.error("Error en getTrainerReviews:", error);
     return res.status(500).json({
       message: "Error al obtener las reseñas del entrenador",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -86,7 +83,7 @@ const replyToReview = async (req, res) => {
   try {
     const reviewId = req.params.id;
     const { reply } = req.body;
-    const trainerId = req.user.id; // del token JWT
+    const trainerId = req.user.id;
 
     if (!reply || reply.trim() === "") {
       return res.status(400).json({ message: "La respuesta no puede estar vacía" });
@@ -101,19 +98,25 @@ const replyToReview = async (req, res) => {
       return res.status(403).json({ message: "No estás autorizado para responder esta reseña" });
     }
 
-    review.reply = reply;
+    review.trainerReply = {
+      text: reply,
+      repliedAt: new Date(),
+    };
+
     await review.save();
 
-    res.status(200).json({ message: "Respuesta agregada", review });
+    res.status(200).json({ message: "Respuesta agregada correctamente", review });
   } catch (error) {
     console.error("Error al responder reseña:", error);
-    res.status(500).json({ message: "Error interno del servidor", error: error.message });
+    res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
   }
 };
-
 
 module.exports = {
   createReview,
   getTrainerReviews,
-  replyToReview
+  replyToReview,
 };
