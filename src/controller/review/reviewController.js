@@ -67,8 +67,9 @@ const getTrainerReviews = async (req, res) => {
     }
 
     const reviews = await Review.find({ trainer: trainerId })
-      .sort({ createdAt: -1 }) // orden más recientes primero
-      .select("rating comment createdAt");
+      .sort({ createdAt: -1 })
+      .populate("author", "name lastName")
+      .select("rating comment createdAt reply");
 
     return res.status(200).json({ reviews });
   } catch (error) {
@@ -80,7 +81,39 @@ const getTrainerReviews = async (req, res) => {
   }
 };
 
+// RESPONDER UNA RESEÑA
+const replyToReview = async (req, res) => {
+  try {
+    const reviewId = req.params.id;
+    const { reply } = req.body;
+    const trainerId = req.user.id; // del token JWT
+
+    if (!reply || reply.trim() === "") {
+      return res.status(400).json({ message: "La respuesta no puede estar vacía" });
+    }
+
+    const review = await Review.findById(reviewId);
+    if (!review) {
+      return res.status(404).json({ message: "Reseña no encontrada" });
+    }
+
+    if (review.trainer.toString() !== trainerId) {
+      return res.status(403).json({ message: "No estás autorizado para responder esta reseña" });
+    }
+
+    review.reply = reply;
+    await review.save();
+
+    res.status(200).json({ message: "Respuesta agregada", review });
+  } catch (error) {
+    console.error("Error al responder reseña:", error);
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
+  }
+};
+
+
 module.exports = {
   createReview,
   getTrainerReviews,
+  replyToReview
 };
