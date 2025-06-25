@@ -144,7 +144,7 @@ const getServiceById = async (req, res) => {
 //Obtener servicios activos
 const getActiveServices = async (req, res) => {
   try {
-    const services = await Service.find({ published: true });
+    const services = await Service.find();
     res.status(200).json(services);
   } catch (error) {
     console.error("Error al obtener servicios activos:", error.message);
@@ -232,6 +232,51 @@ const uploadFileToService = async (req, res) => {
   }
 };
 
+const deleteService = async (req, res) => {
+  const { id } = req.params;
+ 
+  try {
+    const deleted = await Service.findByIdAndDelete(id);
+ 
+    if (!deleted) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+ 
+    res.status(200).json({ message: "Servicio eliminado correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar servicio:", error.message);
+    res.status(500).json({ message: "Error del servidor al eliminar el servicio" });
+  }
+};
+
+const updateService = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const service = await Service.findByIdAndUpdate(id, updates, {
+      new: true, // devuelve el documento actualizado
+      runValidators: true, // valida según el schema
+    });
+
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    res.status(200).json({
+      message: "Servicio actualizado correctamente",
+      service,
+    });
+  } catch (error) {
+    console.error("Error al actualizar el servicio:", error);
+    res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+};
+
+
 
 module.exports = {
   createService,
@@ -240,7 +285,10 @@ module.exports = {
   getServiceById,
   getActiveServices,
   getTrainerFiles,
-  servicePayment
+  servicePayment,
+  uploadFileToService,
+  deleteService,
+  updateService
 };
 
 

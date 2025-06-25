@@ -3,15 +3,27 @@ const router = express.Router();
 const userController = require('../../controller/users/userController');
 const validateJWT = require('../../middlewares/validateJwt');
 
-//Metodos HTTP
-router.post('/register', userController.createUser);  //Crear usuario
-router.post('/login', userController.loginUser);     //Login usuario
-router.post('/forgot-password', validateJWT, userController.forgotPassword)  //Recuperar mail
-router.get('/trainers', validateJWT, userController.getAllTrainers)
-router.post('/forgot-password', userController.forgotPassword);
-router.post('/reset-password/:token', userController.resetPassword);
-router.get('/bookings/:id', validateJWT, userController.getAllServicesFromUser)
-router.get('/:id', validateJWT, userController.getUserById)  // usuario por id
+// Crear y autenticar usuario
+router.post('/register', userController.createUser);          // Crear usuario
+router.post('/login', userController.loginUser);              // Login usuario
+
+// Recuperación de contraseña
+router.post('/forgot-password', userController.forgotPassword);             // Enviar email de recuperación
+router.post('/reset-password/:token', userController.resetPassword);       // Resetear contraseña
+
+// Obtener entrenadores
+router.get('/trainers', validateJWT, userController.getAllTrainers);
+
+// Obtener servicios contratados por usuario
+router.get('/bookings/:id', validateJWT, userController.getAllServicesFromUser);
+
+// Actualizar datos del usuario (⚠️ debe ir antes que `/:id`)
+router.patch('/:id', validateJWT, userController.updateUser); 
+
+// Obtener datos de usuario por ID
+router.get('/:id', validateJWT, userController.getUserById);
+
+module.exports = router;
 
 
 
