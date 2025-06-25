@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const createBooking = async (req, res) => {
   const { serviceId } = req.body;
   const userId = req.params.id;
+
   try {
     const service = await Service.findById(serviceId);
     if (!service || !service.published) {
@@ -15,9 +16,7 @@ const createBooking = async (req, res) => {
 
     const user = await User.findById(userId);
     if (user.role !== "USER_ROLE") {
-      return res
-        .status(403)
-        .json({ message: "Solo usuarios pueden contratar servicios" });
+      return res.status(403).json({ message: "Solo usuarios pueden contratar servicios" });
     }
 
     const booking = await Booking.create({
@@ -26,13 +25,15 @@ const createBooking = async (req, res) => {
       trainer: service.trainer,
     });
 
-    return res
-      .status(201)
-      .json({ message: "Servicio contratado con éxito", booking });
+    return res.status(201).json({
+      message: "Servicio contratado con éxito",
+      booking,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error al contratar servicio", error: error.message });
+    return res.status(500).json({
+      message: "Error al contratar servicio",
+      error: error.message,
+    });
   }
 };
 
@@ -44,27 +45,26 @@ const acceptRejectBooking = async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (user.role !== "TRAINER_ROLE") {
-      return res
-        .status(403)
-        .json({ message: "Solo entrenadores pueden aceptar/rechazar servicios" });
+      return res.status(403).json({ message: "Solo entrenadores pueden aceptar/rechazar servicios" });
     }
 
     const bookingUpdate = await Booking.findByIdAndUpdate(
-      { _id: bookingId },
-      { status: action }
+      bookingId,
+      { status: action },
+      { new: true }
     );
 
     if (!bookingUpdate) {
-      return res.status(404).json({ message: "Servicio no disponible" });
+      return res.status(404).json({ message: "Servicio no encontrado" });
     }
 
     return res.status(201).json({
-      message: "Status del servicio contratado actualizado",
+      message: "Estado del servicio actualizado",
       status: action,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Error al modificar el status de servicio contratado",
+      message: "Error al modificar estado",
       error: error.message,
     });
   }
@@ -74,6 +74,7 @@ const acceptRejectBooking = async (req, res) => {
 const cancelClass = async (req, res) => {
   try {
     const { id } = req.params;
+
     const booking = await Booking.findById(id);
     if (!booking) {
       return res.status(404).json({ message: "Clase no encontrada" });
@@ -86,17 +87,43 @@ const cancelClass = async (req, res) => {
     booking.status = "CANCELLED";
     await booking.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Clase cancelada correctamente",
       booking,
     });
   } catch (error) {
     console.error("Error al cancelar la clase:", error.message);
-    res.status(400).json({ message: "Error al cancelar la clase" });
+    return res.status(400).json({ message: "Error al cancelar la clase" });
   }
 };
 
-// ✅ NUEVO: OBTENER TODAS LAS RESERVAS DE UN ENTRENADOR
+// OBTENER CLASES CONFIRMADAS DE UN USUARIO (para reseñar)
+const getConfirmedBookingsByUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const bookings = await Booking.find({
+      user: userId,
+      status: "CONFIRMED"
+    })
+      .populate("trainer", "name lastName")
+      .populate("service", "name date time duration mode price");
+
+    if (!bookings.length) {
+      return res.status(200).json({ clases: [] });
+    }
+
+    return res.status(200).json({ clases: bookings });
+  } catch (error) {
+    console.error("Error al obtener clases confirmadas:", error.message);
+    return res.status(500).json({
+      message: "Error al obtener clases confirmadas",
+      error: error.message,
+    });
+  }
+};
+
+// OBTENER TODAS LAS RESERVAS DE UN ENTRENADOR
 const getBookingsByTrainer = async (req, res) => {
   const trainerId = req.params.id;
 
@@ -123,9 +150,34 @@ const getBookingsByTrainer = async (req, res) => {
   }
 };
 
+// OBTENER TODAS LAS RESERVAS DE UN USUARIO
+const getBookingsByUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const bookings = await Booking.find({ user: userId })
+      .populate("trainer", "name lastName")
+      .populate("service", "name date time duration mode price");
+
+    if (!bookings.length) {
+      return res.status(200).json({ bookings: [] });
+    }
+
+    return res.status(200).json({ bookings });
+  } catch (error) {
+    console.error("Error al obtener reservas del usuario:", error.message);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createBooking,
   acceptRejectBooking,
   cancelClass,
-  getBookingsByTrainer, // ✅ nuevo export
+  getBookingsByTrainer,
+  getBookingsByUser,
+  getConfirmedBookingsByUser,
 };

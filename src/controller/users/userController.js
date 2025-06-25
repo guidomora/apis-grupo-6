@@ -4,23 +4,21 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { sendResetEmail } = require('../../helpers/mail/nodeMailer');
 
-//CREAR USUARIO
+// CREAR USUARIO
 const createUser = async (req, res) => {
   try {
     const { name, lastName, mail, password, birth, role } = req.body;
 
     const emailExists = await User.findOne({ mail });
     if (emailExists) {
-      return res.status(400).json({
-        message: "El correo ya esta registrado",
-      });
+      return res.status(400).json({ message: "El correo ya está registrado" });
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         message:
-          "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, un número y un carácter especial",
+          "La contraseña debe tener entre 8 y 15 caracteres, incluyendo mayúscula, número y carácter especial",
       });
     }
 
@@ -30,9 +28,7 @@ const createUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      }
+      { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
     res.status(201).json({
@@ -42,38 +38,28 @@ const createUser = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
   }
 };
 
-//LOGIN USUARIO
+// LOGIN USUARIO
 const loginUser = async (req, res) => {
-  
   try {
     const { mail, password } = req.body;
 
     const user = await User.findOne({ mail });
     if (!user) {
-      return res.status(400).json({
-        message: "Usuario no encontrado",
-      });
+      return res.status(400).json({ message: "Usuario no encontrado" });
     }
 
     if (user.password !== password) {
-      return res.status(401).json({
-        message: "Contraseña incorrecta",
-      });
+      return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      }
+      { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
     return res.status(200).json({
@@ -83,33 +69,34 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
   }
 };
 
-//CONTRASEÑA OLVIDADA
+// RECUPERAR CONTRASEÑA
 const forgotPassword = async (req, res) => {
   const { mail } = req.body;
 
-  const user = await User.findOne({ mail });
-  if (!user) {
-    return res.status(404).json({ message: "Usuario no encontrado" });
+  try {
+    const user = await User.findOne({ mail });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    await sendResetEmail(user.mail, resetLink);
+
+    return res.status(200).json({ message: "Enlace de recuperación enviado" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al enviar el email", error: error.message });
   }
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
-  });
-
-  const resetLink = `http://localhost:5173/reset-password/${token}`;
-  await sendResetEmail(user.mail, resetLink);
-
-  return res.status(200).json({ message: "Enlace de recuperación enviado" });
 };
- 
-//RESETEAR CONTRASEÑA
+
+// RESETEAR CONTRASEÑA
 const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { newPassword } = req.body;
@@ -125,22 +112,20 @@ const resetPassword = async (req, res) => {
     if (!passwordRegex.test(newPassword)) {
       return res.status(400).json({
         message:
-          "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, un número y un carácter especial",
+          "La contraseña debe tener entre 8 y 15 caracteres, incluyendo mayúscula, número y carácter especial",
       });
     }
 
     user.password = newPassword;
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Contraseña actualizada correctamente" });
+    res.status(200).json({ message: "Contraseña actualizada correctamente" });
   } catch (err) {
-    return res.status(400).json({ message: "Token inválido o expirado" });
+    res.status(400).json({ message: "Token inválido o expirado" });
   }
 };
 
-// OBTENER USUARIO SEGUN SU ID
+// OBTENER USUARIO POR ID
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -149,69 +134,18 @@ const getUserById = async (req, res) => {
       return res.status(400).json({ message: "ID inválido" });
     }
 
-    const user = await User.findById(id); // ✅ esta es la forma correcta
-
+    const user = await User.findById(id);
     if (!user) {
-      return res.status(404).json({
-        message: "Usuario no encontrado",
-      });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    return res.status(200).json(user); // o { user }, como prefieras en frontend
+    return res.status(200).json({ user }); // ✅ CORREGIDO
   } catch (error) {
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
   }
 };
 
-
-//OBTENER A TODOS LOS ENTRENADORES
-const getAllTrainers = async (req, res) => {
-  try {
-    const trainers = await User.find({ role: "TRAINER_ROLE" });
-
-    if (trainers.length == 0) {
-      return res.status(200).json({ message: "No hay entrenadores" });
-    }
-
-    return res.status(200).json({ trainers });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
-  }
-};
-
-//OBTENER TODOS LOS SERVICIOS DE LOS ENTRENADORES
-const getAllServicesFromUser = async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const user = await User.findById({ _id: userId });
-
-    if (!user) {
-      return res.status(404).json({
-        message: "Usuario no encontrado",
-      });
-    }
-
-    const bookings = await Bookings.find({ user: userId });
-
-    if (bookings.length == 0) {
-      return res.status(200).json({ message: "No hay servicios contratados" });
-    }
-
-    return res.status(200).json({ bookings });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
-  }
-};
-
+// ACTUALIZAR USUARIO
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
@@ -232,27 +166,53 @@ const updateUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al actualizar usuario:", error);
-    res.status(500).json({
-      message: "Error interno del servidor",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
   }
 };
 
+// OBTENER ENTRENADORES
+const getAllTrainers = async (req, res) => {
+  try {
+    const trainers = await User.find({ role: "TRAINER_ROLE" });
 
+    if (!trainers.length) {
+      return res.status(200).json({ message: "No hay entrenadores" });
+    }
 
+    res.status(200).json({ trainers });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
+  }
+};
 
+// OBTENER SERVICIOS CONTRATADOS POR USUARIO
+const getAllServicesFromUser = async (req, res) => {
+  const userId = req.params.id;
 
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
 
+    const bookings = await Bookings.find({ user: userId });
+    if (!bookings.length) {
+      return res.status(200).json({ message: "No hay servicios contratados" });
+    }
+
+    res.status(200).json({ bookings });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor", error: error.message });
+  }
+};
 
 module.exports = {
   createUser,
   loginUser,
   forgotPassword,
+  resetPassword,
   getUserById,
+  updateUser,
   getAllTrainers,
   getAllServicesFromUser,
-  forgotPassword,
-  resetPassword,
-  updateUser
 };

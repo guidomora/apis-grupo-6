@@ -86,30 +86,30 @@ const postUnpostService = async (req, res) => {
 const searchService = async (req, res) => {
   try {
     const { category, zone, mode, duration, price } = req.query;
-
-    const filters = {};
+    const filters = { published: true }; // <- sólo servicios publicados
 
     if (category) filters.category = category;
     if (zone) filters.zone = zone;
     if (mode) filters.mode = mode;
     if (duration) filters.duration = Number(duration);
-    if (price) filters.price = { $lte: Number(price) }; // precio hasta
+    if (price) filters.price = { $lte: Number(price) };
 
     const services = await Service.find(filters).populate("trainer", "-password");
 
-    if (services.length === 0) {
-      return res.status(200).json({ message: "No se encontraron servicios con esos filtros" });
+    if (!services.length) {
+      return res.status(200).json({ services: [] });
     }
 
     res.status(200).json({ services });
   } catch (error) {
-    console.error(error);
+    console.error("Error al filtrar servicios:", error.message);
     res.status(500).json({
-      message: "Error al filtrar servicios",
+      message: "Error interno del servidor",
       error: error.message,
     });
   }
-}
+};
+
 
 // Obtener un servicio por ID e incrementar las vistas
 const getServiceById = async (req, res) => {
