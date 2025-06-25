@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 const sendResetEmail = async (to, resetLink) => {
   await transporter.sendMail({
-    from: `"Tu App" <${process.env.MAIL_USER}>`,
+    from: `"EntreApp" <${process.env.MAIL_USER}>`,
     to,
     subject: "Recuperación de contraseña",
     html: `<p>Hacé clic en el siguiente enlace para restablecer tu contraseña:</p>
