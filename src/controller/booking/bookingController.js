@@ -133,8 +133,8 @@ const getBookingsByTrainer = async (req, res) => {
 
   try {
     const bookings = await Booking.find({ trainer: trainerId })
-      .populate("user", "name lastName")
-      .populate("service", "name date time");
+      .populate("user")
+      .populate("service"); 
 
     if (!bookings.length) {
       return res.status(200).json({ message: "No hay clases contratadas aún" });
@@ -156,8 +156,8 @@ const getBookingsByUser = async (req, res) => {
 
   try {
     const bookings = await Booking.find({ user: userId })
-      .populate("trainer", "name lastName")
-      .populate("service", "name date time duration mode price");
+      .populate("user")
+      .populate("service"); 
 
     if (!bookings.length) {
       return res.status(200).json({ bookings: [] });

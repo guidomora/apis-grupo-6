@@ -11,15 +11,16 @@ router.get("/shared-files/:id", validateJWT, servicesController.getTrainerFiles)
 // Crear y subir archivo
 router.post('/', validateJWT, servicesController.createService);  // Crear un servicio
 router.patch('/upload-file/:id', validateJWT, servicesController.uploadFileToService);
+router.put('/:id/add-file', validateJWT, servicesController.addSharedFile);
 
 // Publicar/despublicar (PUT para toggle de published)
 router.put('/:id', validateJWT, servicesController.postUnpostService);
 router.delete('/:id', validateJWT, servicesController.deleteService);
 router.patch('/:id', validateJWT, servicesController.updateService);
 
+router.post('/create-preference', servicesController.servicePayment); // Pago (puede ir al final si no interfiere)
 // Rutas con ID deben ir al final
 router.get('/:id', servicesController.getServiceById); // Ver un servicio específico + views++
-router.post('/create-preference', servicesController.servicePayment); // Pago (puede ir al final si no interfiere)
 
 
 module.exports = router;

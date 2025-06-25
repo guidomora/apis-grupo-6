@@ -288,6 +288,29 @@ const updateService = async (req, res) => {
   }
 };
 
+const addSharedFile = async (req, res) => {
+  const { id } = req.params;
+  const { url } = req.body;
+
+  if (!url) {
+    return res.status(400).json({ message: "Debe proporcionar una URL" });
+  }
+
+  try {
+    const service = await Service.findById(id);
+    if (!service) {
+      return res.status(404).json({ message: "Servicio no encontrado" });
+    }
+
+    service.sharedFiles.push(url);
+    await service.save();
+
+    return res.status(200).json({ message: "Archivo agregado correctamente", service });
+  } catch (error) {
+    console.error("Error al agregar archivo:", error.message);
+    return res.status(500).json({ message: "Error al agregar archivo" });
+  }
+};
 
 
 module.exports = {
@@ -300,7 +323,8 @@ module.exports = {
   servicePayment,
   uploadFileToService,
   deleteService,
-  updateService
+  updateService,
+  addSharedFile
 };
 
 
