@@ -3,56 +3,46 @@ const User = require("../../models/user");
 const Booking = require("../../models/booking");
 const mongoose = require("mongoose");
 
-// CREAR UNA RESEÑA
 const createReview = async (req, res) => {
   try {
     const { rating, comment, author, trainer, service } = req.body;
 
-    if (!rating || !comment || !author || !trainer || !service) {
-      return res.status(400).json({
-        message: "Faltan campos requeridos",
-      });
-    }
-
-    const [authorExists, trainerExists] = await Promise.all([
-      User.findById(author),
-      User.findById(trainer),
-    ]);
-
+    // Validar existencia de usuario y entrenador
+    const authorExists = await User.findById(author);
+    const trainerExists = await User.findById(trainer);
     if (!authorExists || !trainerExists) {
-      return res.status(400).json({
-        message: "Usuario o entrenador inexistente",
-      });
+      return res.status(400).json({ message: "Usuario o entrenador inexistente" });
     }
 
-    const bookingExists = await Booking.findOne({
+    // Verificar que el usuario tenga una clase CONFIRMADA con ese servicio y ese entrenador
+    const bookingConfirmed = await Booking.findOne({
       user: author,
       trainer,
       service,
       status: "CONFIRMED",
     });
 
-    if (!bookingExists) {
+    if (!bookingConfirmed) {
       return res.status(403).json({
-        message: "Solo podés comentar si contrataste esa clase confirmada",
+        message: "Solo podés reseñar si tu clase fue confirmada",
       });
     }
 
-    const alreadyReviewed = await Review.findOne({ author, trainer, service });
-    if (alreadyReviewed) {
-      return res.status(400).json({
-        message: "Ya dejaste una reseña para esta clase con este entrenador",
-      });
-    }
-
+    // Intentar crear la reseña (si ya existe, el índice único evita duplicados)
     const review = new Review({ rating, comment, author, trainer, service });
     await review.save();
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "Reseña creada correctamente",
       review,
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Ya dejaste una reseña para esta clase",
+      });
+    }
+
     console.error("Error al crear reseña:", error);
     return res.status(500).json({
       message: "Error interno del servidor",
@@ -75,16 +65,15 @@ const getTrainerReviews = async (req, res) => {
       return res.status(404).json({ message: "Entrenador no encontrado" });
     }
 
-    // Manejo seguro del populate
     const reviews = await Review.find({ trainer: trainerId })
       .populate("author", "name lastName")
       .populate({
         path: "service",
-        select: "description category",
-        strictPopulate: false, // ⚠️ evita error si el servicio ya no existe
+        select: "name category date time mode price",
+        strictPopulate: false, // evita error si service fue eliminado
       });
 
-    // Filtramos reseñas con service = null
+    // Filtramos reseñas cuyo servicio fue eliminado
     const filteredReviews = reviews.filter(r => r.service !== null);
 
     return res.status(200).json({ reviews: filteredReviews });
@@ -96,7 +85,6 @@ const getTrainerReviews = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   createReview,
